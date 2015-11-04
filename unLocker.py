@@ -1,9 +1,9 @@
-import pyautogui
-import time
+from pyautogui import keyDown, keyUp
+from time import sleep
 
 def pressKey(key):
-	pyautogui.keyDown(key)
-	pyautogui.keyUp(key)
+	keyDown(key)
+	keyUp(key)
 
 def enterSeeds(seedList):
 	for seed in seedList:
@@ -14,11 +14,11 @@ def enterSeeds(seedList):
 		for letter in seed:
 			pressKey(letter)
 		pressKey('enter')
-		time.sleep(4)
+		sleep(5)
 		pressKey('esc')
 		pressKey('down')
 		pressKey('enter')
-		time.sleep(1.0)
+		sleep(1.0)
 
 def readMeText(currentVer,seedFile,countdown=10):
 	with open(seedFile) as seedFileTemp:
@@ -36,7 +36,15 @@ def readMeText(currentVer,seedFile,countdown=10):
 	input('Press ENTER to begin entering seeds ({} second countdown)\n>'.format(countdown))
 	for i in range(1,countdown+1)[::-1]:
 		print('Starting in: {}'.format(i))
-		time.sleep(1)
+		sleep(1)
+
+def finish(numOfSeeds):
+	pressKey('up')
+	pressKey('enter')
+	pressKey('q')
+	print('All {} easter eggs unlocked.'.format(numOfSeeds))
+	print('Thankyou for using Isaac Easter Egg Seed Unlocker!')
+	print('Support me by checking out my other projects: gitHub.com/Box-Of-Hats')
 
 def main():
 	currentVer = '1.0'
@@ -46,13 +54,15 @@ def main():
 	try:
 		seedFile = open(seedFilePath)
 		seedList = [str(seed) for seed in seedFile]
-	except:
-		print('Missing seed file: {}'.format(seedFilePath))
-	readMeText(currentVer=currentVer,
+		readMeText(currentVer=currentVer,
 			seedFile=seedFilePath,
 			countdown=countdown)
-	time.sleep(1)
-	enterSeeds(seedList)
+		sleep(1)
+		enterSeeds(seedList)
+		finish(len(seedList))
+	except:
+		print('Missing seed file: {}'.format(seedFilePath))
+	
 	
 	
 if __name__ == '__main__':
